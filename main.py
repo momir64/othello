@@ -14,7 +14,7 @@ GREEN = (0, 144, 103)
 WHITE = (255, 255, 255)
 BACKGROUND = (26, 28, 29)
 
-# korišćene vrednosti
+# često korišćene vrednosti
 T_WIDTH = WIDTH - L_BORDER - R_BORDER
 T_HEIGHT = HEIGHT - T_BORDER - B_BORDER
 RADIUS = int(min(T_WIDTH, T_HEIGHT) / 20)
