@@ -15,7 +15,7 @@ while True:
             sys.exit()
         if event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos()
-            x, y = xy_to_pos(pos[0], pos[1]) if in_table(pos) else -1
+            x, y = xy_to_pos(pos[0], pos[1]) if in_table(pos) else (-1, -1)
             if x != -1 and BOARD[x][y] == MOVES:
                 BOARD[x][y] = TRENUTNI
                 SCORE[TRENUTNI] += 1
