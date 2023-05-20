@@ -1,5 +1,8 @@
+from game import switch_trenutni
 from pygame import gfxdraw
-from globs import *
+from main import USER
+from main import BOT
+from pieces import *
 import pygame
 
 
@@ -105,14 +108,14 @@ def print_game_over():
     screen.blit(text2, box2)
 
 def print_score(score):
-    score_b = font_roboto.render(str(score[BLACK]), True, WHITE_C, BACKGROUND_C)
-    score_w = font_roboto.render(str(score[WHITE]), True, WHITE_C, BACKGROUND_C)
-    b_box = score_b.get_rect()
-    w_box = score_w.get_rect()
-    b_box.midleft = (L_BORDER * 2.5, SCORE_HEIGHT)
-    w_box.midright = (WIDTH - R_BORDER * 2.5, SCORE_HEIGHT)
-    screen.blit(score_b, b_box)
-    screen.blit(score_w, w_box)
+    score_l = font_roboto.render(str(score[USER]), True, WHITE_C, BACKGROUND_C)
+    score_r = font_roboto.render(str(score[BOT]), True, WHITE_C, BACKGROUND_C)
+    l_box = score_l.get_rect()
+    r_box = score_r.get_rect()
+    l_box.midleft = (L_BORDER * 2.5, SCORE_HEIGHT)
+    r_box.midright = (WIDTH - R_BORDER * 2.5, SCORE_HEIGHT)
+    screen.blit(score_l, l_box)
+    screen.blit(score_r, r_box)
 
 def print_board(board, score):
     log_board(board)
