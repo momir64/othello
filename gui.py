@@ -1,10 +1,6 @@
-from game import switch_trenutni
 from pygame import gfxdraw
-from main import USER
-from main import BOT
 from pieces import *
 import pygame
-
 
 # podešavanja
 ROBOT_ICON = '󱚝'  # 󱚞 󰚩
@@ -24,12 +20,10 @@ GREEN_C = (0, 144, 103)
 WHITE_C = (255, 255, 255)
 BACKGROUND_C = (32, 32, 32)  # (26, 28, 29)
 
-
 # često korišćene vrednosti
 T_WIDTH = WIDTH - L_BORDER - R_BORDER
 T_HEIGHT = HEIGHT - T_BORDER - B_BORDER
 RADIUS = min(T_WIDTH, T_HEIGHT) // 20
-
 
 pygame.init()
 font_mdi = pygame.font.Font('mdi.ttf', 64)
@@ -40,7 +34,6 @@ programIcon = pygame.image.load('icon.png')
 pygame.display.set_icon(programIcon)
 pygame.display.set_caption("Othello")
 
-
 def in_table(pos):
     return pos[0] > L_BORDER and pos[0] < WIDTH - R_BORDER and pos[1] > T_BORDER and pos[1] < HEIGHT - B_BORDER
 
@@ -49,7 +42,6 @@ def pos_to_xy(x, y):
 
 def xy_to_pos(x, y):
     return min(7, int((x - L_BORDER) / T_WIDTH * 8)), min(7, int((y - T_BORDER) / T_HEIGHT * 8))
-
 
 def draw_piece(x, y, color):
     x, y = pos_to_xy(x, y)
@@ -97,7 +89,10 @@ def set_board(board):
         board[3 + i][4 - i] = BLACK
     return board
 
+GAME_OVER = False
 def print_game_over():
+    global GAME_OVER
+    GAME_OVER = True
     text1 = font_roboto2.render('GAME', True, WHITE_C, BACKGROUND_C)
     text2 = font_roboto2.render('OVER', True, WHITE_C, BACKGROUND_C)
     box1 = text1.get_rect()

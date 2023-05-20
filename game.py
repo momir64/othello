@@ -42,6 +42,7 @@ def flip_line(board, player, opponent, x, y, xi, yi, score=None):
             score[player] += 1
 
 def flip(board, player, x, y, score=None):
+    board[x][y] = player
     opponent = WHITE if player == BLACK else BLACK
     for xi, yi in BORDER_POSITIONS:
         if check_pos(x, y, xi, yi) and board[x + xi][y + yi] == opponent and check_line(board, player, x, y, xi, yi):

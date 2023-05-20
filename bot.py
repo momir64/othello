@@ -1,8 +1,7 @@
-from main import USER
-from main import BOT
 from pieces import *
 from game import *
 
+DEPTH = 4
 CORNERS = ((0, 0), (0, 7), (7, 0), (7, 7))
 SUB_CORNERS = (((0, 1), (1, 0), (1, 1)), ((0, 6), (1, 6), (1, 7)), ((6, 0), (6, 1), (7, 1)), ((6, 6), (6, 7), (7, 6)))
 BOARD_VALUES = ((20, -3, 11, +8, +8, 11, -3, 20),
@@ -13,6 +12,14 @@ BOARD_VALUES = ((20, -3, 11, +8, +8, 11, -3, 20),
                 (11, -4, +2, +2, +2, +2, -4, 11),
                 (-3, -7, -4, +1, +1, -4, -7, -3),
                 (20, -3, 11, +8, +8, 11, -3, 20))
+
+def calc_function(usr, bot, sign):
+    if usr > bot:
+        return sign * 100.0 * usr / (usr + bot)
+    elif usr < bot:
+        return -1 * sign * 100.0 * bot / (usr + bot)
+    else:
+        return 0
 
 def heuristic_function(board):
     usr_tiles = 0
@@ -37,9 +44,8 @@ def heuristic_function(board):
                         else:
                             bot_front_tiles += 1
                         break
-
-    p = (100.0 * (usr_tiles if usr_tiles > bot_tiles else -bot_tiles if usr_tiles < bot_tiles else 0)) / (usr_tiles + bot_tiles)
-    f = (100.0 * (-usr_front_tiles if usr_front_tiles > bot_front_tiles else bot_front_tiles if usr_front_tiles < bot_front_tiles else 0)) / (usr_front_tiles + bot_front_tiles)
+    p = calc_function(usr_tiles, bot_tiles, 1)
+    f = calc_function(usr_front_tiles, bot_front_tiles, -1)
 
     # Popunjenost ćoškova
     usr_tiles = bot_tiles = 0
@@ -52,9 +58,9 @@ def heuristic_function(board):
 
     # Bliskost ćoškova
     usr_tiles = bot_tiles = 0
-    for corner in CORNERS:
+    for i, corner in enumerate(CORNERS):
         if board[corner[0]][corner[1]] == EMPTY:
-            for sub_corner in SUB_CORNERS:
+            for sub_corner in SUB_CORNERS[i]:
                 if board[sub_corner[0]][sub_corner[1]] == USER:
                     usr_tiles += 1
                 elif board[sub_corner[0]][sub_corner[1]] == BOT:
@@ -62,9 +68,32 @@ def heuristic_function(board):
     l = -12.5 * (usr_tiles - bot_tiles)
 
     # Mobilnost
-    usr_tiles = len(get_moves(board, USER))
-    bot_tiles = len(get_moves(board, BOT))
-    m = (100.0 * (usr_tiles if usr_tiles > bot_tiles else -bot_tiles if usr_tiles < bot_tiles else 0)) / (usr_tiles + bot_tiles)
+    m = calc_function(len(get_moves(board, USER)), len(get_moves(board, BOT)), 1)
 
     # Finalna vrednost
     return (10 * p) + (801.724 * c) + (382.026 * l) + (78.922 * m) + (74.396 * f) + (10 * d)
+
+def gameover():
+    pass
+
+def minimax(board, depth, trenutni, alpha, beta):
+    moves = get_moves(board, trenutni)
+    if not depth or not moves:
+        return heuristic_function(board), None
+    score = -float('inf') if trenutni == USER else float('inf')
+    for move in moves:
+        tmp_board = [r[:] for r in board]
+        flip(tmp_board, trenutni, move[0], move[1])
+        minimax_value = minimax(tmp_board, depth - 1, switch_trenutni(trenutni), alpha, beta)[0]
+        if trenutni == USER:
+            score = max(score, minimax_value)
+            alpha = max(alpha, minimax_value)
+        else:
+            score = min(score, minimax_value)
+            beta = max(alpha, minimax_value)
+        if beta <= alpha:
+            break
+    return score, move
+
+def make_move(board):
+    return minimax(board, DEPTH, BOT, -float('inf'), float('inf'))[1]
