@@ -103,8 +103,8 @@ def print_game_over():
     screen.blit(text2, box2)
 
 def print_score(score):
-    score_l = font_roboto.render(str(score[USER]), True, WHITE_C, BACKGROUND_C)
-    score_r = font_roboto.render(str(score[BOT]), True, WHITE_C, BACKGROUND_C)
+    score_l = font_roboto.render(str(score[USER]) + ' ', True, WHITE_C, BACKGROUND_C)
+    score_r = font_roboto.render(' ' + str(score[BOT]), True, WHITE_C, BACKGROUND_C)
     l_box = score_l.get_rect()
     r_box = score_r.get_rect()
     l_box.midleft = (L_BORDER * 2.5, SCORE_HEIGHT)
