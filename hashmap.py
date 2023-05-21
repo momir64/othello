@@ -1,52 +1,22 @@
-class HashMap:
+class BoardHashMap:
     def __init__(self, size):
+        self.table = [[] for _ in range(size)]
         self.size = size
-        self.hash_table = [[] for _ in range(self.size)]
 
-    def set_val(self, key, val):
-        hashed_key = hash(key) % self.size
-        bucket = self.hash_table[hashed_key]
+    def to_bitboard(self, board):
+        bitboard = 1
+        for x in range(8):
+            for y in range(8):
+                bitboard = bitboard << 2 | board[x][y]
+        return bitboard
 
-        found_key = False
-        for index, record in enumerate(bucket):
-            record_key, record_val = record
-            if record_key == key:
-                found_key = True
-                break
+    def add(self, board, val):
+        key = self.to_bitboard(board)
+        self.table[key % self.size].append((key, val))
 
-        if found_key:
-            bucket[index] = (key, val)
-        else:
-            bucket.append((key, val))
-
-    def get_val(self, key):
-        hashed_key = hash(key) % self.size
-        bucket = self.hash_table[hashed_key]
-
-        found_key = False
-        for index, record in enumerate(bucket):
-            record_key, record_val = record
-            if record_key == key:
-                found_key = True
-                break
-
-        if found_key:
-            return record_val
-        else:
-            return "No record found"
-
-    def delete_val(self, key):
-        hashed_key = hash(key) % self.size
-        bucket = self.hash_table[hashed_key]
-        found_key = False
-        for index, record in enumerate(bucket):
-            record_key, record_val = record
-            if record_key == key:
-                found_key = True
-                break
-        if found_key:
-            bucket.pop(index)
-        return
-
-    def __str__(self):
-        return "".join(str(item) for item in self.hash_table)
+    def get(self, board):
+        key = self.to_bitboard(board)
+        for item in self.table[key % self.size]:
+            if item[0] == key:
+                return item[1]
+        return None

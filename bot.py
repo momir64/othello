@@ -1,17 +1,21 @@
+from datetime import datetime
+from hashmap import *
 from pieces import *
 from game import *
 
-DEPTH = 4
+DEPTH_TIME = 1
+PRIME_SIZE = 1000003
+HEURISTIC_MAP = BoardHashMap(PRIME_SIZE)
 CORNERS = ((0, 0), (0, 7), (7, 0), (7, 7))
 SUB_CORNERS = (((0, 1), (1, 0), (1, 1)), ((0, 6), (1, 6), (1, 7)), ((6, 0), (6, 1), (7, 1)), ((6, 6), (6, 7), (7, 6)))
-BOARD_VALUES = ((20, -3, 11, +8, +8, 11, -3, 20),
+BOARD_VALUES = ((40, -3, 11, +8, +8, 11, -3, 40),
                 (-3, -7, -4, +1, +1, -4, -7, -3),
                 (11, -4, +2, +2, +2, +2, -4, 11),
                 (+8, +1, +2, -3, -3, +2, +1, +8),
                 (+8, +1, +2, -3, -3, +2, +1, +8),
                 (11, -4, +2, +2, +2, +2, -4, 11),
                 (-3, -7, -4, +1, +1, -4, -7, -3),
-                (20, -3, 11, +8, +8, 11, -3, 20))
+                (40, -3, 11, +8, +8, 11, -3, 40))
 
 def calc_function(usr, bot, sign):
     if usr > bot:
@@ -22,6 +26,10 @@ def calc_function(usr, bot, sign):
         return 0
 
 def heuristic_function(board):
+    score = HEURISTIC_MAP.get(board)
+    if score:
+        return score
+
     usr_tiles = 0
     bot_tiles = 0
     usr_front_tiles = 0
@@ -71,20 +79,20 @@ def heuristic_function(board):
     m = calc_function(len(get_moves(board, USER)), len(get_moves(board, BOT)), 1)
 
     # Finalna vrednost
-    return (10 * p) + (801.724 * c) + (382.026 * l) + (78.922 * m) + (74.396 * f) + (10 * d)
+    score = (10 * p) + (801.724 * c) + (382.026 * l) + (78.922 * m) + (74.396 * f) + (10 * d)
+    HEURISTIC_MAP.add(board, score)
+    return score
 
-def gameover():
-    pass
-
-def minimax(board, depth, trenutni, alpha, beta):
+def minimax(board, trenutni, alpha, beta, start_time):
     moves = get_moves(board, trenutni)
-    if not depth or not moves:
+    if (datetime.now() - start_time).total_seconds() >= DEPTH_TIME or not moves:
         return heuristic_function(board), None
+
     score = -float('inf') if trenutni == USER else float('inf')
     for move in moves:
         tmp_board = [r[:] for r in board]
         flip(tmp_board, trenutni, move[0], move[1])
-        minimax_value = minimax(tmp_board, depth - 1, switch_trenutni(trenutni), alpha, beta)[0]
+        minimax_value = minimax(tmp_board, switch_trenutni(trenutni), alpha, beta, start_time)[0]
         if trenutni == USER:
             score = max(score, minimax_value)
             alpha = max(alpha, minimax_value)
@@ -93,7 +101,8 @@ def minimax(board, depth, trenutni, alpha, beta):
             beta = max(alpha, minimax_value)
         if beta <= alpha:
             break
+
     return score, move
 
 def make_move(board):
-    return minimax(board, DEPTH, BOT, -float('inf'), float('inf'))[1]
+    return minimax(board, BOT, -float('inf'), float('inf'), datetime.now())[1]

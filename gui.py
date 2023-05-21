@@ -3,10 +3,16 @@ from pieces import *
 import pygame
 
 # podešavanja
-ROBOT_ICON = '󱚝'  # 󱚞 󰚩
-USER_ICON = '󰀄'  # 󰀉
-PLAYER_W = ROBOT_ICON
-PLAYER_B = USER_ICON
+LOGGING = True
+EMPTY_ICON = "\033[92m ◇"
+BLACK_ICON = "\033[94m ◉"
+WHITE_ICON = "\033[0m ◉"
+MOVES_ICON = "\033[93m ◎"
+PIECE_ICONS = (EMPTY_ICON, BLACK_ICON, WHITE_ICON, MOVES_ICON)
+ROBOT_ICON = '󱚝'  # 󰚩
+USER_ICON = '󰀄'   # 󰀉
+ROBOT_ICON_OUTLINE = '󱙺'  # 󱚞
+USER_ICON_OUTLINE = '󰀓'   # 󰭕
 SCORE_HEIGHT = 64
 HEIGHT = 800 + SCORE_HEIGHT
 WIDTH = 800
@@ -63,9 +69,9 @@ def draw_piece(x, y, color):
         gfxdraw.filled_circle(screen, x, y, RADIUS - 1, GREEN_C)
         gfxdraw.aacircle(screen, x, y, RADIUS - 1, GREEN_C)
 
-def set_score():
-    player_b = font_mdi.render(USER_ICON, True, WHITE_C)
-    player_w = font_mdi.render(ROBOT_ICON, True, WHITE_C)
+def print_score_icons(trenutni):
+    player_b = font_mdi.render(USER_ICON if trenutni == USER else USER_ICON_OUTLINE, True, WHITE_C, BACKGROUND_C)
+    player_w = font_mdi.render(ROBOT_ICON if trenutni == BOT else ROBOT_ICON_OUTLINE, True, WHITE_C, BACKGROUND_C)
     b_box = player_b.get_rect()
     w_box = player_w.get_rect()
     b_box.midleft = (L_BORDER, SCORE_HEIGHT)
@@ -75,7 +81,6 @@ def set_score():
 
 def set_board(board):
     screen.fill(BACKGROUND_C)
-    set_score()
     pygame.draw.rect(screen, GREEN_C, pygame.Rect(L_BORDER, T_BORDER, WIDTH - L_BORDER - R_BORDER, HEIGHT - T_BORDER - B_BORDER))
     for i in range(9):
         pygame.draw.line(screen, BLACK_C, (L_BORDER + T_WIDTH * i / 8, T_BORDER), (L_BORDER + T_WIDTH * i / 8, HEIGHT - B_BORDER))
@@ -89,10 +94,7 @@ def set_board(board):
         board[3 + i][4 - i] = BLACK
     return board
 
-GAME_OVER = False
 def print_game_over():
-    global GAME_OVER
-    GAME_OVER = True
     text1 = font_roboto2.render('GAME', True, WHITE_C, BACKGROUND_C)
     text2 = font_roboto2.render('OVER', True, WHITE_C, BACKGROUND_C)
     box1 = text1.get_rect()
@@ -101,10 +103,11 @@ def print_game_over():
     box2.midtop = (WIDTH // 2, SCORE_HEIGHT)
     screen.blit(text1, box1)
     screen.blit(text2, box2)
+    print_score_icons(EMPTY)
 
 def print_score(score):
-    score_l = font_roboto.render(str(score[USER]) + ' ', True, WHITE_C, BACKGROUND_C)
-    score_r = font_roboto.render(' ' + str(score[BOT]), True, WHITE_C, BACKGROUND_C)
+    score_l = font_roboto.render(str(score[USER]) + '       ', True, WHITE_C, BACKGROUND_C)
+    score_r = font_roboto.render('       ' + str(score[BOT]), True, WHITE_C, BACKGROUND_C)
     l_box = score_l.get_rect()
     r_box = score_r.get_rect()
     l_box.midleft = (L_BORDER * 2.5, SCORE_HEIGHT)
@@ -113,7 +116,8 @@ def print_score(score):
     screen.blit(score_r, r_box)
 
 def print_board(board, score):
-    log_board(board)
+    if LOGGING:
+        log_board(board)
     print_score(score)
     for x in range(8):
         for y in range(8):
@@ -122,6 +126,6 @@ def print_board(board, score):
 def log_board(board):
     for x in range(8):
         for y in range(8):
-            print(board[y][x], end='')
+            print(PIECE_ICONS[board[y][x]], end='')
         print()
     print()

@@ -1,8 +1,10 @@
-EMPTY = "\033[92m ◇"
-BLACK = "\033[94m ◉"
-WHITE = "\033[0m ◉"
-MOVES = "\033[93m ◎"
+import random
 
-USER = BLACK
+EMPTY = 0
+BLACK = 1
+WHITE = 2
+MOVES = 3
+
+USER = BLACK if random.getrandbits(1) else WHITE
 TRENUTNI = BLACK
 BOT = WHITE if USER == BLACK else BLACK
