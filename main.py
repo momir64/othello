@@ -1,5 +1,5 @@
 from pieces import *
-from game import *
+from logic import *
 from bot import *
 from gui import *
 import pygame

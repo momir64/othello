@@ -1,9 +1,9 @@
 from datetime import datetime
 from hashmap import *
 from pieces import *
-from game import *
+from logic import *
 
-DEPTH_TIME = 1
+DEPTH_TIME = 1  # sekundi
 PRIME_SIZE = 1000003
 HEURISTIC_MAP = BoardHashMap(PRIME_SIZE)
 CORNERS = ((0, 0), (0, 7), (7, 0), (7, 7))
