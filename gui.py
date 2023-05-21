@@ -3,14 +3,14 @@ from pieces import *
 import pygame
 
 # podešavanja
-LOGGING = True
+LOGGING = False
 EMPTY_ICON = "\033[92m ◇"
 BLACK_ICON = "\033[94m ◉"
 WHITE_ICON = "\033[0m ◉"
 MOVES_ICON = "\033[93m ◎"
 PIECE_ICONS = (EMPTY_ICON, BLACK_ICON, WHITE_ICON, MOVES_ICON)
-ROBOT_ICON = '󱚝'  # 󰚩
-USER_ICON = '󰀄'   # 󰀉
+ROBOT_ICON = '󱚝'          # 󰚩
+USER_ICON = '󰀄'           # 󰀉
 ROBOT_ICON_OUTLINE = '󱙺'  # 󱚞
 USER_ICON_OUTLINE = '󰀓'   # 󰭕
 SCORE_HEIGHT = 64
@@ -105,7 +105,7 @@ def print_game_over():
     screen.blit(text2, box2)
     print_score_icons(EMPTY)
 
-def print_score(score):
+def print_score(score, trenutni):
     score_l = font_roboto.render(str(score[USER]) + '       ', True, WHITE_C, BACKGROUND_C)
     score_r = font_roboto.render('       ' + str(score[BOT]), True, WHITE_C, BACKGROUND_C)
     l_box = score_l.get_rect()
@@ -114,11 +114,12 @@ def print_score(score):
     r_box.midright = (WIDTH - R_BORDER * 2.5, SCORE_HEIGHT)
     screen.blit(score_l, l_box)
     screen.blit(score_r, r_box)
+    print_score_icons(trenutni)
 
-def print_board(board, score):
+def print_board(board, score, trenutni):
     if LOGGING:
         log_board(board)
-    print_score(score)
+    print_score(score, trenutni)
     for x in range(8):
         for y in range(8):
             draw_piece(x, y, board[x][y])
