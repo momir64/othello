@@ -4,7 +4,7 @@ from pieces import *
 from logic import *
 
 MAX_DEPTH = 15
-MAX_DEPTH_TIME = 2  # sekundi
+MAX_DEPTH_TIME = 3  # sekundi
 PRIME_SIZE = 1000003
 HEURISTIC_MAP = BoardHashMap(PRIME_SIZE)
 TRANSPOSITION_MAP = BoardHashMap(PRIME_SIZE)
