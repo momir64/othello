@@ -1,7 +1,7 @@
 # Othello
 
 Igra othello realizovana u pythonu. Igru igraju korisnik i računar, a prvi igrač se određuje nasumično.  
-Poseduje grafički interfejs napravljen koršćenjem pygame biblioteke.  
+Poseduje grafički interfejs napravljen koršćenjem pygame modula.  
 Projekat iz algoritama i struktura podataka.  
 
 ## Intalacija pygame biblioteke
