@@ -8,7 +8,7 @@ from gui import *
 import pygame
 import sys
 
-# odigravanje poteza i provere da li je isti igrač ponovo na potezu i da li je kraj igre
+# odigravanje poteza sa proverama da li je isti igrač ponovo na potezu i da li je kraj igre
 def do_move(x, y, board, score, trenutni):
     clear_moves(board)
     score[trenutni] += 1
