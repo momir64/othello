@@ -2,7 +2,7 @@ from globals import *
 
 BORDER_POSITIONS = ((-1, -1), (0, -1), (1, -1), (-1, 0), (1, 0), (-1, 1), (0, 1), (1, 1))
 
-# proverava da li su koordinate zajedno sa pomerajem unutar table
+# proverava da li su koordinate uz zadati pomeraj unutar table
 def check_pos(x, y, xi=0, yi=0):
     return 0 <= x + xi <= 7 and 0 <= y + yi <= 7
 
