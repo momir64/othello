@@ -1,7 +1,7 @@
 from datetime import datetime
+from game_logic import *
 from hashmap import *
 from globals import *
-from logic import *
 
 # podešavanja
 MAX_DEPTH = 15

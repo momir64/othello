@@ -1,5 +1,8 @@
+# Neophodno je instalirati pygame modul:
+# pip install pygame
+
+from game_logic import *
 from globals import *
-from logic import *
 from bot import *
 from gui import *
 import pygame
