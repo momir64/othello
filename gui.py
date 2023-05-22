@@ -74,7 +74,7 @@ def draw_piece(x, y, color):
         gfxdraw.filled_circle(screen, x, y, RADIUS - 1, GREEN_C)
         gfxdraw.aacircle(screen, x, y, RADIUS - 1, GREEN_C)
 
-# iscrtava ikone korisnika
+# iscrtava ikone igrača
 def print_score_icons(trenutni):
     player_b = font_mdi.render(USER_ICON if trenutni == USER else USER_ICON_OUTLINE, True, WHITE_C, BACKGROUND_C)
     player_w = font_mdi.render(ROBOT_ICON if trenutni == BOT else ROBOT_ICON_OUTLINE, True, WHITE_C, BACKGROUND_C)
