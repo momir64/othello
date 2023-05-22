@@ -1,4 +1,4 @@
-# Neophodno je instalirati pygame modul:
+# Neophodno je instalirati pygame modul zbog grafičkog interfejsa:
 # pip install pygame
 
 from game_logic import *
