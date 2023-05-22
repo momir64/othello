@@ -1,10 +1,11 @@
-from pieces import *
+from globals import *
 from logic import *
 from bot import *
 from gui import *
 import pygame
 import sys
 
+# odigravanje poteza i provere da li je isti igrač ponovo na potezu i da li je kraj igre
 def do_move(x, y, board, score, trenutni):
     clear_moves(board)
     score[trenutni] += 1
@@ -28,6 +29,8 @@ def main():
     CONTINUE_GAME = True
     TRENUTNI = BLACK
 
+    # za sliučaj da je bot prvi, uvek igra isti prvi potez
+    # ko igra prvi se određuje random u globals.py
     if TRENUTNI == BOT:
         SCORE = {USER: 1, BOT: 4}
         BOARD[4][4] = BOT
@@ -38,6 +41,7 @@ def main():
     print_board(BOARD, SCORE, USER)
 
     while True:
+        # ako je bot na potezu
         if CONTINUE_GAME and TRENUTNI == BOT:
             move = make_move(BOARD)
             CONTINUE_GAME, TRENUTNI = do_move(move[0], move[1], BOARD, SCORE, TRENUTNI)
@@ -45,7 +49,8 @@ def main():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            elif CONTINUE_GAME and event.type == pygame.MOUSEBUTTONDOWN:
+            # ako je korisnik na potezu
+            elif CONTINUE_GAME and event.type == pygame.MOUSEBUTTONDOWN and TRENUTNI == USER:
                 pos = pygame.mouse.get_pos()
                 x, y = xy_to_pos(pos[0], pos[1]) if in_table(pos) else (-1, -1)
                 if x != -1 and BOARD[x][y] == MOVES:

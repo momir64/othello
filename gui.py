@@ -1,5 +1,5 @@
 from pygame import gfxdraw
-from pieces import *
+from globals import *
 import pygame
 
 # podešavanja
@@ -31,6 +31,7 @@ T_WIDTH = WIDTH - L_BORDER - R_BORDER
 T_HEIGHT = HEIGHT - T_BORDER - B_BORDER
 RADIUS = min(T_WIDTH, T_HEIGHT) // 20
 
+# pygame podešavanja
 pygame.init()
 font_mdi = pygame.font.Font('mdi.ttf', 64)
 font_roboto = pygame.font.Font('roboto.ttf', 64)
@@ -40,15 +41,19 @@ programIcon = pygame.image.load('icon.png')
 pygame.display.set_icon(programIcon)
 pygame.display.set_caption("Othello")
 
+# proverava da li su prozor koordinate unutar table
 def in_table(pos):
     return pos[0] > L_BORDER and pos[0] < WIDTH - R_BORDER and pos[1] > T_BORDER and pos[1] < HEIGHT - B_BORDER
 
+# pretvara koordinate na tabli u prozor koordinate
 def pos_to_xy(x, y):
     return int(L_BORDER + T_WIDTH / 16 + T_WIDTH * x / 8), int(T_BORDER + T_HEIGHT / 16 + T_HEIGHT * y / 8)
 
+# pretvara prozor koordinate u koordinate na tabli
 def xy_to_pos(x, y):
     return min(7, int((x - L_BORDER) / T_WIDTH * 8)), min(7, int((y - T_BORDER) / T_HEIGHT * 8))
 
+# iscrtava žeton na prozoru
 def draw_piece(x, y, color):
     x, y = pos_to_xy(x, y)
 
@@ -69,6 +74,7 @@ def draw_piece(x, y, color):
         gfxdraw.filled_circle(screen, x, y, RADIUS - 1, GREEN_C)
         gfxdraw.aacircle(screen, x, y, RADIUS - 1, GREEN_C)
 
+# iscrtava ikone korisnika
 def print_score_icons(trenutni):
     player_b = font_mdi.render(USER_ICON if trenutni == USER else USER_ICON_OUTLINE, True, WHITE_C, BACKGROUND_C)
     player_w = font_mdi.render(ROBOT_ICON if trenutni == BOT else ROBOT_ICON_OUTLINE, True, WHITE_C, BACKGROUND_C)
@@ -79,6 +85,7 @@ def print_score_icons(trenutni):
     screen.blit(player_b, b_box)
     screen.blit(player_w, w_box)
 
+# postavlja tablu
 def set_board(board):
     screen.fill(BACKGROUND_C)
     pygame.draw.rect(screen, GREEN_C, pygame.Rect(L_BORDER, T_BORDER, WIDTH - L_BORDER - R_BORDER, HEIGHT - T_BORDER - B_BORDER))
@@ -94,6 +101,7 @@ def set_board(board):
         board[3 + i][4 - i] = BLACK
     return board
 
+# iscrtava game over tekst
 def print_game_over():
     text1 = font_roboto2.render('GAME', True, WHITE_C, BACKGROUND_C)
     text2 = font_roboto2.render('OVER', True, WHITE_C, BACKGROUND_C)
@@ -105,6 +113,7 @@ def print_game_over():
     screen.blit(text2, box2)
     print_score_icons(EMPTY)
 
+# ispisuje score
 def print_score(score, trenutni):
     score_l = font_roboto.render(str(score[USER]) + '       ', True, WHITE_C, BACKGROUND_C)
     score_r = font_roboto.render('       ' + str(score[BOT]), True, WHITE_C, BACKGROUND_C)
@@ -116,6 +125,7 @@ def print_score(score, trenutni):
     screen.blit(score_r, r_box)
     print_score_icons(trenutni)
 
+# iscrtava tablu
 def print_board(board, score, trenutni):
     if LOGGING:
         log_board(board)
@@ -124,6 +134,7 @@ def print_board(board, score, trenutni):
         for y in range(8):
             draw_piece(x, y, board[x][y])
 
+# ispisuje tablu u konzoli
 def log_board(board):
     for x in range(8):
         for y in range(8):

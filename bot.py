@@ -1,8 +1,9 @@
 from datetime import datetime
 from hashmap import *
-from pieces import *
+from globals import *
 from logic import *
 
+# podešavanja
 MAX_DEPTH = 15
 MAX_DEPTH_TIME = 3  # sekundi
 PRIME_SIZE = 1000003
@@ -19,7 +20,7 @@ BOARD_VALUES = ((20, -3, 11, +8, +8, 11, -3, 20),
                 (-3, -7, -4, +1, +1, -4, -7, -3),
                 (20, -3, 11, +8, +8, 11, -3, 20))
 
-
+# pomoćna funkcija
 def calc_function(usr, bot, sign):
     if usr > bot:
         return sign * 100.0 * usr / (usr + bot)
@@ -28,7 +29,7 @@ def calc_function(usr, bot, sign):
     else:
         return 0
 
-
+# funkcija koja računa heuristiku i koristi hash tabelu za čuvanje i čitanje već izračunatih
 def heuristic_function(board):
     score = HEURISTIC_MAP.get(board)
     if score:
@@ -56,7 +57,11 @@ def heuristic_function(board):
                         else:
                             bot_front_tiles += 1
                         break
+
+    # Količina
     p = calc_function(usr_tiles, bot_tiles, 1)
+
+    # Stabilnost
     f = calc_function(usr_front_tiles, bot_front_tiles, -1)
 
     # Popunjenost ćoškova
@@ -87,7 +92,7 @@ def heuristic_function(board):
     HEURISTIC_MAP.add(board, score)
     return score
 
-
+# minimax funkcija sa alpha-beta rezovima, tabelom transpozicija i vremenskim ograničenjem
 def minimax(board, trenutni, depth, alpha, beta, start_time):
     result = TRANSPOSITION_MAP.get(board, depth)
     if result:
@@ -120,7 +125,7 @@ def minimax(board, trenutni, depth, alpha, beta, start_time):
     TRANSPOSITION_MAP.add(board, (score, move), depth)
     return score, move
 
-
+# traženje najboljeg poteza sa vremenskim ograničenjem (iterative deepening)
 def make_move(board):
     depth = 1
     result = True
