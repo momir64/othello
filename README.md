@@ -10,4 +10,4 @@ pip install pygame
 ```
 
 ## Screenshot
-<img src="https://github.com/momir64/othello/assets/40437358/bfbee3de-81c8-4a9d-9a71-7b2050822f8e" height="500">
+<img src="https://github.com/momir64/othello/assets/40437358/e508a60d-7aeb-4fde-b4b3-af89b2bac735" height="500">
